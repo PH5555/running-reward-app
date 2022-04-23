@@ -41,5 +41,16 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSAppTransportSecurity</key>
+      <dict>
+        <key>NSAllowsArbitraryLoads</key> <true/>
+      </dict>
+    <key>io.flutter.embedded_views_preview</key> <true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>러닝을 추적하기 위해 현재 위치를 사용합니다.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>러닝을 추적하기 위해 현재 위치를 사용합니다.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>러닝을 추적하기 위해 현재 위치를 사용합니다.</string>
 </dict>
 </plist>
