@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:ui';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
