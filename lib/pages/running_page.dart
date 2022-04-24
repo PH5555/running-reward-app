@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:running_reward_app/location_service.dart';
@@ -10,10 +12,21 @@ class Running extends StatefulWidget {
 }
 
 class _RunningState extends State<Running> {
-  double distance = 0.0;
-  String time = '';
-  double speed = 0.0;
-  late LocationData location;
+  double _distance = 0.0;
+  int _time = 0;
+  double _speed = 0.0;
+  late Timer _timer;
+  late LocationData _location;
+  StreamController<int> _timeController = StreamController<int>();
+  StreamController<double> _speedController = StreamController<double>();
+
+  @override
+  void dispose() {
+    stopTimer();
+    _timeController.close();
+    _speedController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,34 +38,55 @@ class _RunningState extends State<Running> {
             if (snapshot.hasError) {
               return Text('Error');
             } else if (snapshot.hasData) {
-              location = snapshot.data!;
+              startTimer();
+              _location = snapshot.data!;
               return Padding(
                 padding: const EdgeInsets.only(top: 160),
                 child: Center(
                   child: Column(children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              '평균 속도',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            Text(
-                              speed.toString(),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 50,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 130,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30),
+                          child: Column(
+                            children: [
+                              Text(
+                                '평균 속도',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Container(
+                                width: 100,
+                                child: Center(
+                                    child: StreamBuilder(
+                                  stream: _speedController.stream,
+                                  builder: (context,
+                                      AsyncSnapshot<double> snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(
+                                        _speed.toStringAsFixed(1),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.bold),
+                                      );
+                                    } else {
+                                      return Text(
+                                        _speed.toStringAsFixed(1),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.bold),
+                                      );
+                                    }
+                                  },
+                                )),
+                              ),
+                            ],
+                          ),
                         ),
                         Column(
                           children: [
@@ -63,12 +97,34 @@ class _RunningState extends State<Running> {
                                   fontSize: 12,
                                   fontWeight: FontWeight.normal),
                             ),
-                            Text(
-                              time,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 50,
-                                  fontWeight: FontWeight.bold),
+                            Container(
+                              width: 200,
+                              child: Center(
+                                  child: StreamBuilder(
+                                stream: _timeController.stream,
+                                builder:
+                                    (context, AsyncSnapshot<int> snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Text('Error');
+                                  } else if (snapshot.hasData) {
+                                    return Text(
+                                      timeFormat(snapshot.data!),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 50,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  } else {
+                                    return Text(
+                                      timeFormat(_time),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 50,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  }
+                                },
+                              )),
                             ),
                           ],
                         )
@@ -95,7 +151,7 @@ class _RunningState extends State<Running> {
                           } else if (snapshot.hasData) {
                             updateDistance(snapshot.data!);
                             return Text(
-                              distance.toString(),
+                              _distance.toString(),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 70,
@@ -103,7 +159,7 @@ class _RunningState extends State<Running> {
                             );
                           } else {
                             return Text(
-                              distance.toString(),
+                              _distance.toString(),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 70,
@@ -153,8 +209,49 @@ class _RunningState extends State<Running> {
   }
 
   void updateDistance(LocationData newLocation) {
-    distance = LocationService.getDistance(location, newLocation);
-    location = newLocation;
+    double temp = LocationService.getDistance(_location, newLocation);
+    if (temp >= 100) {
+      _location = newLocation;
+      _distance += 0.1;
+      _speed = _distance / _time * 3600;
+      _speedController.add(_speed);
+    }
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _timeController.add(++_time);
+    });
+  }
+
+  void stopTimer() {
+    _timer.cancel();
+  }
+
+  String timeFormat(int time) {
+    int m, s;
+    String result = '';
+
+    m = time ~/ 60;
+    s = time % 60;
+
+    if (m != 0) {
+      if (m ~/ 10 >= 1) {
+        result += m.toString() + ':';
+      } else {
+        result += '0' + m.toString() + ':';
+      }
+    } else {
+      result += '00:';
+    }
+
+    if (s ~/ 10 >= 1) {
+      result += s.toString();
+    } else {
+      result += '0' + s.toString();
+    }
+
+    return result;
   }
 
   void stopRunning() {
