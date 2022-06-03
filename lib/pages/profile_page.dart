@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:running_reward_app/dialog/present_dialog.dart';
 import 'package:running_reward_app/global.dart' as global;
+import 'package:running_reward_app/listItem/running_result_item.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -35,7 +37,7 @@ class _ProfileState extends State<Profile> {
             style: TextStyle(color: Color(0xff6667AB), fontSize: 14),
           ),
           SizedBox(
-            width: 50,
+            width: 80,
           ),
           Text(
             '시간',
@@ -100,7 +102,7 @@ class _ProfileState extends State<Profile> {
                   child: Stack(
                     children: [
                       IconButton(
-                          onPressed: () {},
+                          onPressed: openPresentBox,
                           icon: Image.asset(
                             'imgs/gift.png',
                             width: 27,
@@ -188,7 +190,7 @@ class _ProfileState extends State<Profile> {
               if (index == 0) {
                 return runningListTitle();
               } else {
-                return ListTile(title: Text('asdf'));
+                return RunningResultItem(date: "3/6", distance: 32, time: 35);
               }
             }));
   }
@@ -220,5 +222,16 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+
+  void openPresentBox() {
+    if (global.rewardCnt == 0) {
+      return;
+    }
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return PresentDialog();
+        });
   }
 }
