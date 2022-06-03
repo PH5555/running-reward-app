@@ -4,6 +4,7 @@ import 'package:location/location.dart';
 import 'package:running_reward_app/location_service.dart';
 import 'package:running_reward_app/pages/profile_page.dart';
 import 'package:running_reward_app/pages/running_page.dart';
+import 'package:running_reward_app/global.dart' as global;
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -72,7 +73,7 @@ class _HomeState extends State<Home> {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '0',
+                  global.todayRunningData.toString(),
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 70,
@@ -89,7 +90,7 @@ class _HomeState extends State<Home> {
                   height: 40,
                 ),
                 InkWell(
-                  onTap: startRunning,
+                  onTap: _startRunning,
                   child: Container(
                     width: 210,
                     height: 50,
@@ -125,7 +126,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void startRunning() {
+  void _startRunning() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Running()));
   }
 }

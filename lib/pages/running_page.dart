@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:running_reward_app/location_service.dart';
+import 'package:running_reward_app/global.dart' as global;
 
 class Running extends StatefulWidget {
   const Running({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _RunningState extends State<Running> {
 
   @override
   void dispose() {
-    stopTimer();
+    _stopTimer();
     _timeController.close();
     _speedController.close();
     super.dispose();
@@ -37,7 +38,7 @@ class _RunningState extends State<Running> {
             if (snapshot.hasError) {
               return Text('Error');
             } else if (snapshot.hasData) {
-              startTimer();
+              _startTimer();
               _location = snapshot.data!;
               return Padding(
                 padding: const EdgeInsets.only(top: 160),
@@ -107,7 +108,7 @@ class _RunningState extends State<Running> {
                                     return Text('Error');
                                   } else if (snapshot.hasData) {
                                     return Text(
-                                      timeFormat(snapshot.data!),
+                                      _timeFormat(snapshot.data!),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 50,
@@ -115,7 +116,7 @@ class _RunningState extends State<Running> {
                                     );
                                   } else {
                                     return Text(
-                                      timeFormat(_time),
+                                      _timeFormat(_time),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 50,
@@ -148,7 +149,7 @@ class _RunningState extends State<Running> {
                               child: Center(child: Text('Error')),
                             );
                           } else if (snapshot.hasData) {
-                            updateDistance(snapshot.data!);
+                            _updateDistance(snapshot.data!);
                             return Text(
                               _distance.toString(),
                               style: TextStyle(
@@ -177,7 +178,10 @@ class _RunningState extends State<Running> {
                       height: 40,
                     ),
                     InkWell(
-                      onTap: stopRunning,
+                      onTap: () {
+                        _setRunningReward();
+                        _stopRunning();
+                      },
                       child: Container(
                         width: 210,
                         height: 50,
@@ -207,7 +211,7 @@ class _RunningState extends State<Running> {
         ));
   }
 
-  void updateDistance(LocationData newLocation) {
+  void _updateDistance(LocationData newLocation) {
     double temp = LocationService.getDistance(_location, newLocation);
     if (temp >= 100) {
       _location = newLocation;
@@ -217,17 +221,17 @@ class _RunningState extends State<Running> {
     }
   }
 
-  void startTimer() {
+  void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       _timeController.add(++_time);
     });
   }
 
-  void stopTimer() {
+  void _stopTimer() {
     _timer.cancel();
   }
 
-  String timeFormat(int time) {
+  String _timeFormat(int time) {
     int m, s;
     String result = '';
 
@@ -253,7 +257,21 @@ class _RunningState extends State<Running> {
     return result;
   }
 
-  void stopRunning() {
+  void _setRunningReward() {
+    global.todayRunningData += _distance;
+
+    if (global.todayRunningData >= 10) {
+      global.rewardCnt = 4;
+    } else if (global.todayRunningData >= 6) {
+      global.rewardCnt = 3;
+    } else if (global.todayRunningData >= 3) {
+      global.rewardCnt = 2;
+    } else if (global.todayRunningData >= 1) {
+      global.rewardCnt = 1;
+    }
+  }
+
+  void _stopRunning() {
     Navigator.pop(context);
   }
 }
