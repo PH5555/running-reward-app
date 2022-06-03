@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:running_reward_app/global.dart' as global;
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -94,12 +95,40 @@ class _ProfileState extends State<Profile> {
                     )
                   ],
                 ),
-                IconButton(
-                    onPressed: () {},
-                    icon: Image.asset(
-                      'imgs/gift.png',
-                      width: 27,
-                    )),
+                Container(
+                  width: 54,
+                  child: Stack(
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: Image.asset(
+                            'imgs/gift.png',
+                            width: 27,
+                          )),
+                      global.rewardCnt != 0
+                          ? Positioned(
+                              right: 0,
+                              child: Stack(
+                                children: [
+                                  Image.asset(
+                                    'imgs/chatBubble.png',
+                                    width: 20,
+                                  ),
+                                  Positioned(
+                                      left: 6.5,
+                                      child: Text(
+                                        global.rewardCnt.toString(),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13),
+                                      ))
+                                ],
+                              ))
+                          : Container()
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

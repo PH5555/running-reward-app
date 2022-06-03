@@ -114,13 +114,30 @@ class _HomeState extends State<Home> {
           Positioned(
               top: 50,
               right: 10,
-              child: IconButton(
-                  onPressed: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Profile())),
-                  icon: Image.asset(
-                    'imgs/profile_icon.png',
-                    width: 20,
-                  )))
+              child: Stack(
+                children: [
+                  IconButton(
+                      onPressed: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Profile())),
+                      icon: Image.asset(
+                        'imgs/profile_icon.png',
+                        width: 20,
+                      )),
+                  global.rewardCnt != 0
+                      ? Positioned(
+                          right: 4,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100))),
+                            width: 6,
+                            height: 6,
+                          ),
+                        )
+                      : Container()
+                ],
+              ))
         ],
       ),
     );
