@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:running_reward_app/database/running_repository.dart';
 import 'package:running_reward_app/dialog/present_dialog.dart';
 import 'package:running_reward_app/global.dart' as global;
 import 'package:running_reward_app/listItem/running_result_item.dart';
+import 'package:running_reward_app/model/running_model.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -184,15 +186,27 @@ class _ProfileState extends State<Profile> {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(13))),
-        child: ListView.builder(
-            itemCount: temp.length + 1,
-            itemBuilder: (context, int index) {
-              if (index == 0) {
-                return runningListTitle();
-              } else {
-                return RunningResultItem(date: "3/6", distance: 32, time: 35);
-              }
-            }));
+        child: FutureBuilder(
+          future: RunningRepository.readRunning(global.database!),
+          builder: (context, AsyncSnapshot<List<RunningModel>> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data!.length + 1,
+                  itemBuilder: (context, int index) {
+                    if (index == 0) {
+                      return runningListTitle();
+                    } else {
+                      return RunningResultItem(
+                          date: snapshot.data![index - 1].date,
+                          distance: snapshot.data![index - 1].distance,
+                          time: snapshot.data![index - 1].time);
+                    }
+                  });
+            } else {
+              return Text('Error');
+            }
+          },
+        ));
   }
 
   @override

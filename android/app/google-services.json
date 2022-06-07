@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "66155204653",
+    "project_id": "running-reward-app",
+    "storage_bucket": "running-reward-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66155204653:android:b8e6872aa4a0a54d5d28a4",
+        "android_client_info": {
+          "package_name": "com.example.running_reward_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "66155204653-vhqtomg5n9uu6cb215surhpcrbo25k9j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzRuQlIcSdbhZwBy5t3D8mBxCRJJ8W99w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "66155204653-vhqtomg5n9uu6cb215surhpcrbo25k9j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "66155204653-7kkfn9kmkr1e2q872h7ju260slmdura6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.runningRewardApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

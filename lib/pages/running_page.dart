@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:running_reward_app/database/running_repository.dart';
 import 'package:running_reward_app/location_service.dart';
 import 'package:running_reward_app/global.dart' as global;
+import 'package:running_reward_app/model/running_model.dart';
 
 class Running extends StatefulWidget {
   const Running({Key? key}) : super(key: key);
@@ -12,7 +14,7 @@ class Running extends StatefulWidget {
 }
 
 class _RunningState extends State<Running> {
-  double _distance = 0.0;
+  double _distance = 0.1;
   int _time = 0;
   double _speed = 0.0;
   late Timer _timer;
@@ -272,6 +274,15 @@ class _RunningState extends State<Running> {
   }
 
   void _stopRunning() {
+    if (_distance != 0) {
+      DateTime now = new DateTime.now();
+      RunningRepository.createRunning(
+          RunningModel(
+              date: now.month.toString() + '/' + now.day.toString(),
+              distance: _distance,
+              time: _time),
+          global.database!);
+    }
     Navigator.pop(context);
   }
 }

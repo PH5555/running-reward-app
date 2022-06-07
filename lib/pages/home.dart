@@ -1,6 +1,7 @@
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:running_reward_app/database/running_repository.dart';
 import 'package:running_reward_app/location_service.dart';
 import 'package:running_reward_app/pages/profile_page.dart';
 import 'package:running_reward_app/pages/running_page.dart';
@@ -117,8 +118,10 @@ class _HomeState extends State<Home> {
               child: Stack(
                 children: [
                   IconButton(
-                      onPressed: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Profile())),
+                      onPressed: () async {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Profile()));
+                      },
                       icon: Image.asset(
                         'imgs/profile_icon.png',
                         width: 20,
