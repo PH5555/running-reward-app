@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:running_reward_app/database/running_repository.dart';
+import 'package:running_reward_app/date.dart';
 import 'package:running_reward_app/location_service.dart';
 import 'package:running_reward_app/global.dart' as global;
 import 'package:running_reward_app/model/running_model.dart';
@@ -180,10 +181,7 @@ class _RunningState extends State<Running> {
                       height: 40,
                     ),
                     InkWell(
-                      onTap: () {
-                        _setRunningReward();
-                        _stopRunning();
-                      },
+                      onTap: _stopRunning,
                       child: Container(
                         width: 210,
                         height: 50,
@@ -260,29 +258,42 @@ class _RunningState extends State<Running> {
   }
 
   void _setRunningReward() {
-    global.todayRunningData += _distance;
+    if (_distance >= 10) {
+      global.rewardCnt += 4;
+    } else if (_distance >= 6) {
+      global.rewardCnt += 3;
+    } else if (_distance >= 3) {
+      global.rewardCnt += 2;
+    } else if (_distance >= 1) {
+      global.rewardCnt += 1;
+    }
+  }
 
-    if (global.todayRunningData >= 10) {
-      global.rewardCnt = 4;
-    } else if (global.todayRunningData >= 6) {
-      global.rewardCnt = 3;
-    } else if (global.todayRunningData >= 3) {
-      global.rewardCnt = 2;
-    } else if (global.todayRunningData >= 1) {
-      global.rewardCnt = 1;
+  void _setRunningDistance() {
+    if (_distance == 0) {
+      return;
+    }
+
+    if (global.todayRunningData == 0) {
+      RunningRepository.createRunning(
+          RunningModel(
+              date: Date.getTodayDate(), distance: _distance, time: _time),
+          global.database!);
+    } else {
+      global.todayRunningData += _distance;
+      global.todayRunningTime += _time;
+      RunningRepository.updateRunning(
+          RunningModel(
+              date: Date.getTodayDate(),
+              distance: global.todayRunningData,
+              time: global.todayRunningTime),
+          global.database!);
     }
   }
 
   void _stopRunning() {
-    if (_distance != 0) {
-      DateTime now = new DateTime.now();
-      RunningRepository.createRunning(
-          RunningModel(
-              date: now.month.toString() + '/' + now.day.toString(),
-              distance: _distance,
-              time: _time),
-          global.database!);
-    }
+    _setRunningDistance();
+    _setRunningReward();
     Navigator.pop(context);
   }
 }

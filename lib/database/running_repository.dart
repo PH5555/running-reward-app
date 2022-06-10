@@ -26,6 +26,11 @@ class RunningRepository {
     );
   }
 
+  static void updateRunning(RunningModel runningModel, Database database) {
+    database.update('running', runningModel.toMap(),
+        where: "date = ?", whereArgs: [runningModel.date]);
+  }
+
   static Future<List<RunningModel>> readRunning(Database database) async {
     final List<Map<String, dynamic>> maps = await database.query('running');
 

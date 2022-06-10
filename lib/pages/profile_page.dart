@@ -13,8 +13,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  List temp = ['a', 'b'];
-
   Widget runningListTitle() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 14),
