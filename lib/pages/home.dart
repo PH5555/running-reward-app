@@ -1,3 +1,4 @@
+import 'package:flutter/semantics.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -74,7 +75,7 @@ class _HomeState extends State<Home> {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  global.todayRunningData.toString(),
+                  global.todayRunningData.toStringAsFixed(1),
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 70,

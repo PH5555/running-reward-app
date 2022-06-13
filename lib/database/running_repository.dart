@@ -43,4 +43,19 @@ class RunningRepository {
       );
     });
   }
+
+  static Future<RunningModel?> readRunningWithQuery(
+      Database database, String date) async {
+    final List<Map<String, dynamic>> map =
+        await database.query('running', where: 'date = ?', whereArgs: [date]);
+
+    if (map.length == 0) {
+      return null;
+    }
+
+    return RunningModel(
+        date: map[0]['date'],
+        distance: map[0]['distance'],
+        time: map[0]['time']);
+  }
 }

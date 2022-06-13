@@ -52,5 +52,7 @@
 	<string>러닝을 추적하기 위해 현재 위치를 사용합니다.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>러닝을 추적하기 위해 현재 위치를 사용합니다.</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 </dict>
 </plist>

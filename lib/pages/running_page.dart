@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:running_reward_app/app_builder.dart';
 import 'package:running_reward_app/database/running_repository.dart';
 import 'package:running_reward_app/date.dart';
 import 'package:running_reward_app/location_service.dart';
@@ -15,7 +16,7 @@ class Running extends StatefulWidget {
 }
 
 class _RunningState extends State<Running> {
-  double _distance = 0.1;
+  double _distance = 0;
   int _time = 0;
   double _speed = 0.0;
   late Timer _timer;
@@ -294,6 +295,7 @@ class _RunningState extends State<Running> {
   void _stopRunning() {
     _setRunningDistance();
     _setRunningReward();
+    AppBuilder.of(context)!.rebuild();
     Navigator.pop(context);
   }
 }

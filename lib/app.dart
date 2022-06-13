@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:running_reward_app/app_builder.dart';
 import 'package:running_reward_app/database/running_repository.dart';
 import 'package:running_reward_app/date.dart';
+import 'package:running_reward_app/model/running_model.dart';
 import 'package:running_reward_app/pages/home.dart';
 import 'package:running_reward_app/shared_preference.dart';
 import 'package:sqflite/sqlite_api.dart';
@@ -20,12 +22,7 @@ class App extends StatelessWidget {
                 future: appSetting(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return MaterialApp(
-                        title: 'Flutter Demo',
-                        theme: ThemeData(
-                          primarySwatch: Colors.blue,
-                        ),
-                        home: Home());
+                    return Home();
                   } else {
                     return Container();
                   }
@@ -36,15 +33,21 @@ class App extends StatelessWidget {
         });
   }
 
-  Future<void> appSetting() async {
-    String? date = await SharedPreference.readcreateLastAccessDate();
+  Future<bool> appSetting() async {
+    String date = await SharedPreference.readcreateLastAccessDate();
     global.rewardCnt = await SharedPreference.readReward();
 
     if (date == Date.getTodayDate()) {
-      global.todayRunningData = await SharedPreference.readRunningDistance();
-      global.todayRunningTime = await SharedPreference.readRunningTime();
+      RunningModel? runningModel =
+          await RunningRepository.readRunningWithQuery(global.database!, date);
+
+      global.todayRunningData =
+          runningModel != null ? runningModel.distance : 0;
+      global.todayRunningTime = runningModel != null ? runningModel.time : 0;
     } else {
       SharedPreference.createLastAccessDate();
     }
+
+    return true;
   }
 }

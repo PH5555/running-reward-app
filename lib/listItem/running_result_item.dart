@@ -35,8 +35,8 @@ class RunningResultItem extends StatelessWidget {
             children: [
               SizedBox(width: 20),
               textWithContainer(56, date),
-              textWithContainer(106, distance.toString() + 'km'),
-              textWithContainer(null, time.toString() + '분'),
+              textWithContainer(106, distance.toStringAsFixed(1) + 'km'),
+              textWithContainer(null, _timeFormat(time)),
             ],
           ),
         ),
@@ -47,5 +47,31 @@ class RunningResultItem extends StatelessWidget {
         )
       ],
     );
+  }
+
+  String _timeFormat(int time) {
+    int m, s;
+    String result = '';
+
+    m = time ~/ 60;
+    s = time % 60;
+
+    if (m != 0) {
+      if (m ~/ 10 >= 1) {
+        result += m.toString() + ':';
+      } else {
+        result += '0' + m.toString() + ':';
+      }
+    } else {
+      result += '00:';
+    }
+
+    if (s ~/ 10 >= 1) {
+      result += s.toString();
+    } else {
+      result += '0' + s.toString();
+    }
+
+    return result;
   }
 }

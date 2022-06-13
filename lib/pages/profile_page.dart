@@ -152,20 +152,7 @@ class _ProfileState extends State<Profile> {
           Padding(
             padding: const EdgeInsets.only(left: 13),
             child: Wrap(
-              children: [
-                presentBox(),
-                presentBox(),
-                presentBox(),
-                presentBox(),
-                presentBox(),
-                presentBox(),
-                presentBox(),
-                presentBox(),
-                presentBox(),
-                presentBox(),
-                presentBox(),
-                presentBox(),
-              ],
+              children: [for (int i = 0; i < 12; i++) presentBox()],
             ),
           ),
           SizedBox(
