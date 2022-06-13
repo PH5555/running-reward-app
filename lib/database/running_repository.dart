@@ -38,7 +38,7 @@ class RunningRepository {
       print(maps[i]['distance'] is int);
       return RunningModel(
         date: maps[i]['date'] as String,
-        distance: maps[i]['distance'] as double,
+        distance: maps[i]['distance'].toString(),
         time: maps[i]['time'] as int,
       );
     });
@@ -55,7 +55,7 @@ class RunningRepository {
 
     return RunningModel(
         date: map[0]['date'],
-        distance: map[0]['distance'],
+        distance: map[0]['distance'].toString(),
         time: map[0]['time']);
   }
 }

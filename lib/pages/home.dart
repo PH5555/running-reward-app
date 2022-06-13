@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '아직 러닝기록이 없어요!',
+                  global.todayRunningData == 0 ? '아직 러닝기록이 없어요!' : '잘했어요!',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 25,

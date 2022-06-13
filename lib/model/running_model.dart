@@ -1,6 +1,6 @@
 class RunningModel {
   final String date;
-  final double distance;
+  final String distance;
   final int time;
 
   RunningModel(

@@ -16,7 +16,7 @@ class Running extends StatefulWidget {
 }
 
 class _RunningState extends State<Running> {
-  double _distance = 0;
+  double _distance = 1;
   int _time = 0;
   double _speed = 0.0;
   late Timer _timer;
@@ -163,7 +163,7 @@ class _RunningState extends State<Running> {
                             );
                           } else {
                             return Text(
-                              _distance.toString(),
+                              _distance.toStringAsFixed(1),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 70,
@@ -267,6 +267,7 @@ class _RunningState extends State<Running> {
       global.rewardCnt += 2;
     } else if (_distance >= 1) {
       global.rewardCnt += 1;
+      print(global.rewardCnt);
     }
   }
 
@@ -278,7 +279,9 @@ class _RunningState extends State<Running> {
     if (global.todayRunningData == 0) {
       RunningRepository.createRunning(
           RunningModel(
-              date: Date.getTodayDate(), distance: _distance, time: _time),
+              date: Date.getTodayDate(),
+              distance: _distance.toString(),
+              time: _time),
           global.database!);
     } else {
       global.todayRunningData += _distance;
@@ -286,7 +289,7 @@ class _RunningState extends State<Running> {
       RunningRepository.updateRunning(
           RunningModel(
               date: Date.getTodayDate(),
-              distance: global.todayRunningData,
+              distance: global.todayRunningData.toString(),
               time: global.todayRunningTime),
           global.database!);
     }

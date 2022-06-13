@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:running_reward_app/app_builder.dart';
 import 'package:running_reward_app/database/running_repository.dart';
 import 'package:running_reward_app/dialog/present_dialog.dart';
 import 'package:running_reward_app/global.dart' as global;
@@ -48,12 +51,17 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget presentBox() {
+  Widget presentBox(int id) {
     return Padding(
       padding: const EdgeInsets.all(3),
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(100)),
-        child: Container(width: 40, height: 40, color: Color(0xffE5E5E5)),
+        child: global.rewardList.contains(id)
+            ? Image.asset(
+                'imgs/award_${id}.png',
+                width: 40,
+              )
+            : Container(width: 40, height: 40, color: Color(0xffE5E5E5)),
       ),
     );
   }
@@ -152,7 +160,7 @@ class _ProfileState extends State<Profile> {
           Padding(
             padding: const EdgeInsets.only(left: 13),
             child: Wrap(
-              children: [for (int i = 0; i < 12; i++) presentBox()],
+              children: [for (int i = 0; i < 12; i++) presentBox(i)],
             ),
           ),
           SizedBox(
@@ -183,7 +191,8 @@ class _ProfileState extends State<Profile> {
                     } else {
                       return RunningResultItem(
                           date: snapshot.data![index - 1].date,
-                          distance: snapshot.data![index - 1].distance,
+                          distance:
+                              double.parse(snapshot.data![index - 1].distance),
                           time: snapshot.data![index - 1].time);
                     }
                   });
@@ -227,10 +236,21 @@ class _ProfileState extends State<Profile> {
     if (global.rewardCnt == 0) {
       return;
     }
+
+    List<int> tempList = [];
+    for (int i = 0; i < global.rewardCnt; i++) {
+      int random = Random().nextInt(11);
+      global.rewardList.add(random);
+      tempList.add(random);
+    }
+
+    global.rewardCnt = 0;
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return PresentDialog();
-        });
+          return PresentDialog(
+            rewardList: tempList,
+          );
+        }).then((value) => AppBuilder.of(context)!.rebuild());
   }
 }

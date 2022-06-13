@@ -22,7 +22,14 @@ class App extends StatelessWidget {
                 future: appSetting(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Home();
+                    return AppBuilder(builder: (context) {
+                      return MaterialApp(
+                          title: 'Flutter Demo',
+                          theme: ThemeData(
+                            primarySwatch: Colors.blue,
+                          ),
+                          home: Home());
+                    });
                   } else {
                     return Container();
                   }
@@ -42,7 +49,7 @@ class App extends StatelessWidget {
           await RunningRepository.readRunningWithQuery(global.database!, date);
 
       global.todayRunningData =
-          runningModel != null ? runningModel.distance : 0;
+          runningModel != null ? double.parse(runningModel.distance) : 0;
       global.todayRunningTime = runningModel != null ? runningModel.time : 0;
     } else {
       SharedPreference.createLastAccessDate();

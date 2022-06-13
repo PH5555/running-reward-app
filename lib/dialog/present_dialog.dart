@@ -1,19 +1,23 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:running_reward_app/app_builder.dart';
+import 'package:running_reward_app/global.dart' as global;
 
 class PresentDialog extends StatelessWidget {
-  const PresentDialog({Key? key}) : super(key: key);
+  final List<int> rewardList;
+  const PresentDialog({Key? key, required this.rewardList}) : super(key: key);
 
   Widget present(int id) {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(100)),
       child: Image.asset(
-        'imgs/treasure.jpeg',
+        'imgs/award_${id}.png',
         width: 45,
       ),
     );
   }
 
-  Widget presentList(int size, context) {
+  Widget presentList(context) {
     return Padding(
       padding: const EdgeInsets.only(left: 18, right: 18, top: 18),
       child: Container(
@@ -24,7 +28,9 @@ class PresentDialog extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(8))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [for (int i = 0; i < size; i++) present(1)],
+          children: [
+            for (int i = 0; i < rewardList.length; i++) present(rewardList[i])
+          ],
         ),
       ),
     );
@@ -36,7 +42,7 @@ class PresentDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            presentList(4, context),
+            presentList(context),
             SizedBox(
               height: 6,
             ),
