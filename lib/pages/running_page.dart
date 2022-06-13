@@ -7,6 +7,7 @@ import 'package:running_reward_app/date.dart';
 import 'package:running_reward_app/location_service.dart';
 import 'package:running_reward_app/global.dart' as global;
 import 'package:running_reward_app/model/running_model.dart';
+import 'package:running_reward_app/shared_preference.dart';
 
 class Running extends StatefulWidget {
   const Running({Key? key}) : super(key: key);
@@ -267,8 +268,8 @@ class _RunningState extends State<Running> {
       global.rewardCnt += 2;
     } else if (_distance >= 1) {
       global.rewardCnt += 1;
-      print(global.rewardCnt);
     }
+    SharedPreference.createReward();
   }
 
   void _setRunningDistance() {

@@ -3,12 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'global.dart' as global;
 
 class SharedPreference {
-  static void createRunningDistance() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    prefs.setDouble('distance', global.todayRunningData);
-  }
-
   static void createLastAccessDate() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -21,20 +15,21 @@ class SharedPreference {
     prefs.setInt('reward', global.rewardCnt);
   }
 
-  static void createRunningTime() async {
+  static void createRewardList() async {
     final prefs = await SharedPreferences.getInstance();
 
-    prefs.setInt('time', global.todayRunningTime);
+    List<String> rewardList = [];
+
+    for (int i = 0; i < 12; i++) {
+      if (global.rewardList.contains(i)) {
+        rewardList.add(i.toString());
+      }
+    }
+
+    prefs.setStringList('rewardList', rewardList);
   }
 
-  static Future<double> readRunningDistance() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final double distance = prefs.getDouble('distance') ?? 0;
-    return distance;
-  }
-
-  static Future<String> readcreateLastAccessDate() async {
+  static Future<String> readLastAccessDate() async {
     final prefs = await SharedPreferences.getInstance();
 
     final String date = prefs.getString('lastAccessDate') ?? '';
@@ -48,10 +43,17 @@ class SharedPreference {
     return reward;
   }
 
-  static Future<int> readRunningTime() async {
+  static Future<Set<int>> readRewardList() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final int time = prefs.getInt('time') ?? 0;
-    return time;
+    final List<String> reward = prefs.getStringList('rewardList') ?? [];
+    print(reward);
+
+    Set<int> rewardList = {};
+    for (int i = 0; i < reward.length; i++) {
+      rewardList.add(int.parse(reward[i]));
+    }
+
+    return rewardList;
   }
 }

@@ -41,8 +41,9 @@ class App extends StatelessWidget {
   }
 
   Future<bool> appSetting() async {
-    String date = await SharedPreference.readcreateLastAccessDate();
+    String date = await SharedPreference.readLastAccessDate();
     global.rewardCnt = await SharedPreference.readReward();
+    global.rewardList = await SharedPreference.readRewardList();
 
     if (date == Date.getTodayDate()) {
       RunningModel? runningModel =

@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:running_reward_app/app_builder.dart';
 import 'package:running_reward_app/database/running_repository.dart';
@@ -7,6 +6,7 @@ import 'package:running_reward_app/dialog/present_dialog.dart';
 import 'package:running_reward_app/global.dart' as global;
 import 'package:running_reward_app/listItem/running_result_item.dart';
 import 'package:running_reward_app/model/running_model.dart';
+import 'package:running_reward_app/shared_preference.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -245,6 +245,9 @@ class _ProfileState extends State<Profile> {
     }
 
     global.rewardCnt = 0;
+    SharedPreference.createReward();
+    SharedPreference.createRewardList();
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
