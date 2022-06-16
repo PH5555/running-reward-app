@@ -17,7 +17,7 @@ class Running extends StatefulWidget {
 }
 
 class _RunningState extends State<Running> {
-  double _distance = 1;
+  double _distance = 0;
   int _time = 0;
   double _speed = 0.0;
   late Timer _timer;
